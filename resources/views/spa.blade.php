@@ -21,17 +21,20 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Война и мир</td>
-                        <td>Л. Н. Толстой</td>
+                    <tr v-for="book in books" class="book">
+                        <th scope="row">@{{book.id}}</th>
+                        <td>@{{book.title}}</td>
+                        <td>@{{book.author}}</td>
                         <td>
-                            <button type="button" class="btn btn-outline-primary" v-on:click="">
+                            <button v-if="book.availability==1" type="button" class="btn btn-outline-primary" v-on:click="changeBookAvailability(book.id)">
                                 Доступна
+                            </button>
+                            <button v-else type="button" class="btn btn-outline-primary" v-on:click="changeBookAvailability(book.id)">
+                                Выдана
                             </button>
                         </td>
                         <td>
-                            <button type="button" class="btn btn-outline-danger" v-on:click="">
+                            <button type="button" class="btn btn-outline-danger" v-on:click="deleteBook(book.id)">
                                 Удалить
                             </button>
                         </td>
@@ -39,14 +42,16 @@
 
                     <!-- Строка с полями для добавления новой книги -->
                     <tr>
+                        @csrf
                         <th scope="row">Добавить</th>
-                        <td><input type="text" class="form-control"></td>
-                        <td><input type="text" class="form-control"></td>
+                        <td><input type="text" v-model="title"  class="form-control"></td>
+                        <td><input type="text" v-model="author" class="form-control"></td>
                         <td></td>
                         <td>
-                            <button type="button" class="btn btn-outline-success" v-on:click="">
+                            <button type="button" class="btn btn-outline-success" v-on:click="addBook">
                                 Добавить
                             </button>
+                        
                         </td>
                     </tr>
                 </tbody>
@@ -63,22 +68,47 @@
     <script>
         let vm = new Vue({
             el: '#app',
-            data: {
+            data() {
+              return{
+                  books:null,
+                  title:null,
+                  author:null,
+             
+                  }
             },
             methods: {
                 loadBookList(){
-                    axios.get('https://api-url/request')  .then((response) => {
-                        
-                     })  .catch((error) => {});
+                    axios.get('/api/book/all')  .then((response) => {
+                    this.books = response.data;
+                   
+                     })
                 },
                 addBook(){
-                    
-                },
+                    axios.post('/api/book/add',{
+                        title: this.title,
+                        author:this.author
+                    }),
+                
+                    axios.get('/api/book/all')  .then((response) => {
+                    this.books = response.data;
+             
+                     }) 
+                    },
                 deleteBook(id){
-                    
+                    axios.get('/api/book/delete/'+id),
+                    axios.get('/api/book/all')  .then((response) => {
+                    this.books = response.data;
+           
+                     })
+                
+                      
                 },
                 changeBookAvailability(id){
-                    
+                    axios.get('/api/book/change_availabilty/'+id),
+                    axios.get('/api/book/all')  .then((response) => {
+                    this.books = response.data;
+                 
+                     }) 
                 }
             },
             mounted(){

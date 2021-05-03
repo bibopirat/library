@@ -1,5 +1,5 @@
 <?php
-
+namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,12 +14,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::post('/book/add', '\App\Http\Controllers\BookController@add');
+Route::get('/book/add', '\App\Http\Controllers\BookController@add');
+Route::get('/book/all', '\App\Http\Controllers\BookController@ball');
 
-Route::get('/book/all', '\App\Http\Controllers\BookController@all');
+Route::get('/book/delete/{id}', '\App\Http\Controllers\BookController@delete');
 
-Route::get('/book/delete/{id}', 'BookController@delete');
-
-Route::get('/book/change_availabilty/{id}', 'BookController@changeAvailabilty');
+Route::get('/book/change_availabilty/{id}', '\App\Http\Controllers\BookController@changeAvailabilty');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();

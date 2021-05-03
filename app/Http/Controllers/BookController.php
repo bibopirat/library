@@ -17,7 +17,7 @@ class BookController extends Controller
       $book = new Book;
 $book->title = $request->title;
 $book->author = $request->author;
-$book->avialibility = 1;
+$book->availability = 1;
 $book->save();
   return "ok";
 
@@ -30,13 +30,13 @@ Book::destroy($id);
  public function changeAvailabilty($id){
 
 $book = Book::find($id);
-$book->avialibility = !$book->avialibility;
+$book->availability = !$book->availability;
 $book->save();
 
-  return $booksArr;
+  return "1";
 
  }
- public function all(){
+ public function ball(){
 
     $booksArr = Book::all();
 
